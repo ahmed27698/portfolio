@@ -27,7 +27,7 @@ export default function Footer() {
                         </Link>
                     </div>
                     <div className="p-2 bg-sky-600 rounded-full flex justify-center items-center hover:scale-110 transition-all transition-500 hover:bg-red-600">
-                        <Link target="_blank" href="https://github.com/ahmed27698">
+                        <Link target="_blank" href="https://www.upwork.com/freelancers/~01f86812e474fdb34d">
                             <FaUpwork />
                         </Link>
                     </div>

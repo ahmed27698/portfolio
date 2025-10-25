@@ -10,7 +10,7 @@ export default function Projects() {
                 </p>
 
                 <p className="font-semibold text-xl flex flex-col px-4 sm:flex-row justify-center items-center gap-2">
-                    Here are a few past design projects I've worked on. Want to
+                    Here are a few past design projects I&apos;ve worked on. Want to
                     see more?
                     <Link
                         href="https://mail.google.com/mail/?view=cm&fs=1&to=ahmedsamir7685@gmail.com"

@@ -1,13 +1,10 @@
 "use client";
 import { motion, useAnimation } from "motion/react";
-import { useState } from "react";
 
 export default function Logo() {
   const controls = useAnimation();
-  const [hovered, setHovered] = useState(false);
 
   const handleHoverStart = async () => {
-    setHovered(true);
     await controls.start({
       pathLength: 0,
       stroke: "#fff",
@@ -21,7 +18,6 @@ export default function Logo() {
   };
 
   const handleHoverEnd = async () => {
-    setHovered(false);
     await controls.start({
       pathLength: 0,
       stroke: "#000",
