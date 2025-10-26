@@ -35,39 +35,42 @@ Built using Next.js and Tailwind CSS, the website focuses on clarity, performanc
             img: "/landwind.png",
         },
     ];
-    const cardRef = useRef<HTMLDivElement>(null);
-    const x = useMotionValue(0.5);
-    const y = useMotionValue(0.5);
-
-    const rotateX = useTransform(y, [0, 1], [10, -10]);
-    const rotateY = useTransform(x, [0, 1], [-10, 10]);
-
-    const springX = useSpring(rotateX, {
-        stiffness: 200,
-        damping: 10,
-    });
-    const springY = useSpring(rotateY, {
-        stiffness: 200,
-        damping: 10,
-    });
-
-    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-        if (!cardRef.current) return;
-        const rect = cardRef.current.getBoundingClientRect();
-        const posX = (e.clientX - rect.left) / rect.width;
-        const posY = (e.clientY - rect.top) / rect.height;
-        x.set(posX);
-        y.set(posY);
-    };
-
-    const handleMouseLeave = () => {
-        x.set(0.5);
-        y.set(0.5);
-    };
 
     return (
         <div className="flex justify-center items-center gap-5 px-4 lg:px-24 md:px-16">
             {projects.map((project) => {
+                const cardRef = useRef<HTMLDivElement>(null);
+                const x = useMotionValue(0.5);
+                const y = useMotionValue(0.5);
+
+                const rotateX = useTransform(y, [0, 1], [10, -10]);
+                const rotateY = useTransform(x, [0, 1], [-10, 10]);
+
+                const springX = useSpring(rotateX, {
+                    stiffness: 200,
+                    damping: 10,
+                });
+                const springY = useSpring(rotateY, {
+                    stiffness: 200,
+                    damping: 10,
+                });
+
+                const handleMouseMove = (
+                    e: React.MouseEvent<HTMLDivElement>
+                ) => {
+                    if (!cardRef.current) return;
+                    const rect = cardRef.current.getBoundingClientRect();
+                    const posX = (e.clientX - rect.left) / rect.width;
+                    const posY = (e.clientY - rect.top) / rect.height;
+                    x.set(posX);
+                    y.set(posY);
+                };
+
+                const handleMouseLeave = () => {
+                    x.set(0.5);
+                    y.set(0.5);
+                };
+
                 return (
                     <motion.div
                         key={project.title}
@@ -93,6 +96,7 @@ Built using Next.js and Tailwind CSS, the website focuses on clarity, performanc
                                 initial={{ opacity: 0 }}
                                 whileHover={{ opacity: 1 }}
                                 transition={{ duration: 0.3 }}
+
                                 className="absolute overflow-auto inset-0 flex items-center justify-center flex-wrap text-white p-4 text-center bg-black/100 rounded-lg"
                             >
                                 {project.description
