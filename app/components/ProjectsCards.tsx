@@ -4,14 +4,15 @@ import Link from "next/link";
 import { motion, useMotionValue, useSpring, useTransform } from "motion/react";
 import { useRef } from "react";
 import Button from "./ProjectsCardsButton";
-export default function ProjectsCards() {
-    interface Project {
-        title: string;
-        description: string;
-        link: string;
-        img: string;
-    }
 
+interface Project {
+    title: string;
+    description: string;
+    link: string;
+    img: string;
+}
+
+export default function ProjectsCards() {
     const projects: Project[] = [
         {
             title: "organic food",
@@ -38,109 +39,110 @@ Built using Next.js and Tailwind CSS, the website focuses on clarity, performanc
 
     return (
         <div className="flex justify-center items-center gap-5 px-4 lg:px-24 md:px-16">
-            {projects.map((project) => {
-                const cardRef = useRef<HTMLDivElement>(null);
-                const x = useMotionValue(0.5);
-                const y = useMotionValue(0.5);
+            {projects.map((project) => (
+                <ProjectCard key={project.title} project={project} />
+            ))}
+        </div>
+    );
+}
 
-                const rotateX = useTransform(y, [0, 1], [10, -10]);
-                const rotateY = useTransform(x, [0, 1], [-10, 10]);
+// مكون منفصل لكل كارت
+function ProjectCard({ project }: { project: Project }) {
+    const cardRef = useRef<HTMLDivElement>(null);
+    const x = useMotionValue(0.5);
+    const y = useMotionValue(0.5);
 
-                const springX = useSpring(rotateX, {
-                    stiffness: 200,
-                    damping: 10,
-                });
-                const springY = useSpring(rotateY, {
-                    stiffness: 200,
-                    damping: 10,
-                });
+    const rotateX = useTransform(y, [0, 1], [10, -10]);
+    const rotateY = useTransform(x, [0, 1], [-10, 10]);
 
-                const handleMouseMove = (
-                    e: React.MouseEvent<HTMLDivElement>
-                ) => {
-                    if (!cardRef.current) return;
-                    const rect = cardRef.current.getBoundingClientRect();
-                    const posX = (e.clientX - rect.left) / rect.width;
-                    const posY = (e.clientY - rect.top) / rect.height;
-                    x.set(posX);
-                    y.set(posY);
-                };
+    const springX = useSpring(rotateX, {
+        stiffness: 200,
+        damping: 10,
+    });
+    const springY = useSpring(rotateY, {
+        stiffness: 200,
+        damping: 10,
+    });
 
-                const handleMouseLeave = () => {
-                    x.set(0.5);
-                    y.set(0.5);
-                };
+    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+        if (!cardRef.current) return;
+        const rect = cardRef.current.getBoundingClientRect();
+        const posX = (e.clientX - rect.left) / rect.width;
+        const posY = (e.clientY - rect.top) / rect.height;
+        x.set(posX);
+        y.set(posY);
+    };
 
-                return (
-                    <motion.div
-                        key={project.title}
-                        ref={cardRef}
-                        onMouseMove={handleMouseMove}
-                        onMouseLeave={handleMouseLeave}
-                        style={{
-                            rotateX: springX,
-                            rotateY: springY,
-                            transformStyle: "preserve-3d",
-                        }}
-                        className="shadow-[0_0_30px] shadow-sky-500 rounded-xl cursor-pointer bg-sky-600 text-white w-64 h-80 flex flex-col justify-between"
-                    >
-                        <div className="bg-sky-700 rounded-t-xl relative overflow-hidden w-full h-48">
-                            <motion.img
-                                src={project.img}
-                                alt={project.title}
-                                className="rounded-lg w-full h-full object-cover"
-                                whileHover={{ filter: "brightness(0.1)" }}
-                            />
+    const handleMouseLeave = () => {
+        x.set(0.5);
+        y.set(0.5);
+    };
 
-                            <motion.div
-                                initial={{ opacity: 0 }}
-                                whileHover={{ opacity: 1 }}
-                                transition={{ duration: 0.3 }}
+    return (
+        <motion.div
+            ref={cardRef}
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
+            style={{
+                rotateX: springX,
+                rotateY: springY,
+                transformStyle: "preserve-3d",
+            }}
+            className="shadow-[0_0_30px] shadow-sky-500 rounded-xl cursor-pointer bg-sky-600 text-white w-64 h-80 flex flex-col justify-between"
+        >
+            <div className="bg-sky-700 rounded-t-xl relative overflow-hidden w-full h-48">
+                <motion.img
+                    src={project.img}
+                    alt={project.title}
+                    className="rounded-lg w-full h-full object-cover"
+                    whileHover={{ filter: "brightness(0.1)" }}
+                />
 
-                                className="absolute overflow-auto inset-0 flex items-center justify-center flex-wrap text-white p-4 text-center bg-black/100 rounded-lg"
-                            >
-                                {project.description
-                                    .split(" ")
-                                    .map((word, index) => (
-                                        <motion.span
-                                            key={index}
-                                            className="hover:text-red-500 ml-2"
-                                            whileHover={{
-                                                scale: 1.1,
-                                                transition: {
-                                                    stiffness: 250,
-                                                    damping: 10,
-                                                    type: "spring",
-                                                },
-                                            }}
-                                        >
-                                            {word}
-                                        </motion.span>
-                                    ))}
-                            </motion.div>
-                        </div>
-
-                        <div className="flex justify-between items-center p-5">
-                            <motion.h2
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    whileHover={{ opacity: 1 }}
+                    transition={{ duration: 0.3 }}
+                    className="absolute overflow-auto inset-0 flex items-center justify-center flex-wrap text-white p-4 text-center bg-black/100 rounded-lg"
+                >
+                    {project.description
+                        .split(" ")
+                        .map((word, index) => (
+                            <motion.span
+                                key={index}
+                                className="hover:text-red-500 ml-2"
                                 whileHover={{
+                                    scale: 1.1,
                                     transition: {
-                                        stiffness: 500,
-                                        damping: 3,
+                                        stiffness: 250,
+                                        damping: 10,
                                         type: "spring",
                                     },
-                                    scale: 1.2,
                                 }}
-                                className="hover:text-red-500"
                             >
-                                {project.title}
-                            </motion.h2>
-                            <Link href={project.link} target="_blank">
-                                <Button>Visit</Button>
-                            </Link>
-                        </div>
-                    </motion.div>
-                );
-            })}
-        </div>
+                                {word}
+                            </motion.span>
+                        ))}
+                </motion.div>
+            </div>
+
+            <div className="flex justify-between items-center p-5">
+                <motion.h2
+                    whileHover={{
+                        transition: {
+                            stiffness: 500,
+                            damping: 3,
+                            type: "spring",
+                        },
+                        scale: 1.2,
+                    }}
+                    className="hover:text-red-500"
+                >
+                    {project.title}
+                </motion.h2>
+                <Link href={project.link} target="_blank">
+                    <Button>Visit</Button>
+                </Link>
+            </div>
+        </motion.div>
     );
 }
